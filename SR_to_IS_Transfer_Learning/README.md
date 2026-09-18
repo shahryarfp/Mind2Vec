@@ -1,6 +1,6 @@
 # Silent Reading to Imagined Speech Transfer Learning
 
-This project tests whether an EEG encoder pretrained on **silent-reading EEG** can improve decoding from **imagined-speech EEG**. The experiment is a subject-specific proof of concept using Subject 1 from the paired silent-reading and imagined-speech dataset used in this study.
+This project tests whether an EEG encoder pretrained on **silent-reading EEG** can improve decoding from **imagined-speech EEG**. The experiment is a subject-specific proof of concept using Subject 1 from the paired silent-reading and imagined-speech dataset used in this study. The original published dataset is publicly available through [OpenNeuro, dataset `ds005170`, version 1.1.2](https://openneuro.org/datasets/ds005170/versions/1.1.2).
 
 The central result is clear: across all imagined-speech training-set sizes tested, pretraining with correctly matched silent-reading targets outperformed both:
 
@@ -82,6 +82,27 @@ The figures above use:
 - 20,000 observed 2v2 pairs per fold; and
 - 500 null permutations with 5,000 sampled pairs per permutation.
 
+## Dataset access
+
+The EEG data must be attached or downloaded **before running the notebook**. The code requires both datasets for the selected participant:
+
+1. that subject's imagined-speech files; and
+2. the corresponding silent-reading files.
+
+The original published data are available from [OpenNeuro (`ds005170`, version 1.1.2)](https://openneuro.org/datasets/ds005170/versions/1.1.2). For easier use in Kaggle, the subject- and task-specific files used by this notebook are also publicly available through the following Kaggle datasets:
+
+| Subject | Imagined speech | Silent reading |
+|---|---|---|
+| Subject 01 | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-is-sub01) | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-reading-sub01) |
+| Subject 02 | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-is-sub02) | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-reading-sub02) |
+| Subject 03 | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-is-sub03) | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-reading-sub03) |
+| Subject 04 | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-is-sub04) | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-reading-sub04) |
+| Subject 05 | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-is-sub05) | [Kaggle dataset](https://www.kaggle.com/datasets/shahryarnamdari/chisco-reading-sub05) |
+
+To reproduce the results shown here, attach the **Subject 01 imagined-speech** and **Subject 01 silent-reading** datasets to the Kaggle notebook. To run another participant, attach the matching pair from the same row and change `SUBJECT_ID` accordingly.
+
+> The notebook paths must point to the attached Kaggle directories. If Kaggle mounts the datasets under different folder names, update `reading_root` and `imagined_root` in `SUBJECT_CONFIGS` before running the data-loading cells.
+
 ## Running the notebook
 
 The complete pipeline is contained in one notebook. The recommended filename is:
@@ -90,8 +111,40 @@ The complete pipeline is contained in one notebook. The recommended filename is:
 silent_reading_to_imagined_speech.ipynb
 ```
 
-Before running it:
+To run it in Kaggle:
 
-1. Set the silent-reading and imagined-speech dataset paths under `SUBJECT_CONFIGS["sub-01"]`.
-2. Use `READING_LABEL_MODES = ["true", "shuffled"]` to reproduce both transfer conditions in one run.
-3. Run all cells in order on a GPU-enabled Kaggle session.
+1. Open the notebook and select **Add Input**.
+2. Attach both the imagined-speech and silent-reading Kaggle datasets for the same subject using the links above.
+3. Set `SUBJECT_ID`, then verify the subject's `reading_root` and `imagined_root` paths under `SUBJECT_CONFIGS`.
+4. Use `READING_LABEL_MODES = ["true", "shuffled"]` to reproduce both transfer conditions in one run.
+5. Enable a GPU accelerator and run all cells in order.
+
+The original Subject 1 runs used Python 3.12.13, TensorFlow 2.19.0, and an NVIDIA Tesla P100 GPU.
+
+### Main dependencies
+
+```text
+tensorflow
+numpy
+pandas
+scikit-learn
+sentence-transformers
+openpyxl
+matplotlib
+tqdm
+```
+
+## Repository structure
+
+```text
+.
+├── README.md
+├── silent_reading_to_imagined_speech.ipynb
+└── figures/
+    ├── subject01_all_metrics.png
+    └── subject01_transfer_gains.png
+```
+
+## Interpretation and limitations
+
+These results demonstrate successful silent-reading-to-imagined-speech transfer **for Subject 1 under the present evaluation design**. They should be interpreted as a within-subject proof of concept, not yet as evidence of population-level or cross-subject generalization. Confirming the broader effect requires replication across the remaining participants and, ideally, paired statistical comparisons across subjects.
