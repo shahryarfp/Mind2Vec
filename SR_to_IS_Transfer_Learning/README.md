@@ -95,33 +95,3 @@ Before running it:
 1. Set the silent-reading and imagined-speech dataset paths under `SUBJECT_CONFIGS["sub-01"]`.
 2. Use `READING_LABEL_MODES = ["true", "shuffled"]` to reproduce both transfer conditions in one run.
 3. Run all cells in order on a GPU-enabled Kaggle session.
-
-The original Subject 1 runs used Python 3.12.13, TensorFlow 2.19.0, and an NVIDIA Tesla P100 GPU.
-
-### Main dependencies
-
-```text
-tensorflow
-numpy
-pandas
-scikit-learn
-sentence-transformers
-openpyxl
-matplotlib
-tqdm
-```
-
-## Repository structure
-
-```text
-.
-├── README.md
-├── silent_reading_to_imagined_speech.ipynb
-└── figures/
-    ├── subject01_all_metrics.png
-    └── subject01_transfer_gains.png
-```
-
-## Interpretation and limitations
-
-These results demonstrate successful silent-reading-to-imagined-speech transfer **for Subject 1 under the present evaluation design**. They should be interpreted as a within-subject proof of concept, not yet as evidence of population-level or cross-subject generalization. Confirming the broader effect requires replication across the remaining participants and, ideally, paired statistical comparisons across subjects.
